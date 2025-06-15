@@ -1,95 +1,96 @@
-#include<stdio.h>
-#include<stdlib.h>
-int input(int a[] , int frame_size)
-{
-	printf("\n\n Input \n\n");
-	for(int i = 1 ; i <= frame_size ; i++)
-	{
-		printf(" Enter Value For Frame[%d] : " , i);
-		scanf("%d",&a[i]);
-		printf("\n");
-	}
-	printf("\n\n");
-	return 1;
-}
-int display(int a[] , int frame_size)
-{
-	printf("\n\n Display \n\n");
-	for(int i = 1 ; i <= frame_size ; i++)
-	{
-		printf(" Frame[%d] : %d " , i , a[i]);
-		printf("\n");
-	}
-	printf("\n\n");
-	return 1;
-}
-int selective_repeat(int frames[] , int window_size , int frame_size)
-{
-		int nt =0;
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-		int k = 0;
-		int left[10000] = {-1};
- 		int i ;
- 		for(i = 1 ; i <= frame_size ; i++)
-	    {
-			int flag = rand() % 2;
-			if(flag)
-			{
-				printf(" Frame[%d] with value %d Acknowledged !!! \n\n", i , frames[i]);
-				nt++;
-			}
-			else
-			{
-		printf(" Frame[%d] with value %d Not Acknowledged !!! \n\n", i ,frames[i]);
-				left[k++] = frames[i];
-				nt++;
-			}
-			if(i % window_size == 0)
-			{
-				for(int x = 0 ; x < k ; x++)
-				{
-			printf(" Frame[%d] with value %d Retransmitted \n\n", x , left[x]);
-			nt++;
-	printf(" Frame[%d] with value %d Acknowledged on Second Attempt \n\n", x , left[x]);
-	}
-				k = 0;
-			}
-	    }
-		for(i = 0 ; i < k ; i++)
-		{
-		 	printf(" Frame[%d] with value %d Retransmitted \n\n", i , left[i]);
+// Function to input frames
+void input(int a[], int frame_size)
+{
+    printf("\nInput Frames:\n");
+    for (int i = 0; i < frame_size; i++)
+    {
+        printf("Enter value for Frame[%d]: ", i);
+        scanf("%d", &a[i]);
+    }
+}
 
-			nt++;
-		printf(" Frame[%d] with value %d Acknowledged on Second Attempt \n\n", i , left[i]);
-		}
-		printf(" Total Transmissions :  %d \n\n", nt);
- 		return 0;
+// Function to display frames
+void display(int a[], int frame_size)
+{
+    printf("\nAll Frames:\n");
+    for (int i = 0; i < frame_size; i++)
+    {
+        printf("Frame[%d]: %d\n", i, a[i]);
+    }
+}
+
+// Simulate Selective Repeat ARQ
+void selective_repeat(int frames[], int window_size, int frame_size)
+{
+    int total_transmissions = 0;
+    int ack[50] = {0}; // Acknowledgment flags
+    int i = 0;
+
+    while (i < frame_size)
+    {
+        printf("\n--- Sending Window (Frames %d to %d) ---\n", i, (i + window_size - 1 < frame_size ? i + window_size - 1 : frame_size - 1));
+
+        // Send frames in the current window
+        for (int j = i; j < i + window_size && j < frame_size; j++)
+        {
+            if (!ack[j])
+            {
+                printf("Sent Frame[%d]: %d\n", j, frames[j]);
+                total_transmissions++;
+            }
+        }
+
+        // Simulate ACKs
+        for (int j = i; j < i + window_size && j < frame_size; j++)
+        {
+            if (!ack[j])
+            {
+                int success = rand() % 2;
+                if (success)
+                {
+                    printf("Frame[%d]: Acknowledged\n", j);
+                    ack[j] = 1;
+                }
+                else
+                {
+                    printf("Frame[%d]: Not Acknowledged (Will retry)\n", j);
+                }
+            }
+        }
+
+        // Slide window to next unacknowledged frame
+        while (i < frame_size && ack[i])
+        {
+            i++;
+        }
+    }
+
+    printf("\nTotal Transmissions (including retransmissions): %d\n", total_transmissions);
 }
 
 int main()
 {
-		int frames[50];
+    int frames[50];
+    int window_size, frame_size;
 
-		int window_size;
+    srand(time(NULL)); // Seed for randomness
 
-		int frame_size;
+    printf("Selective Repeat ARQ Simulation\n");
+    printf("-------------------------------\n");
 
-		printf("\n\n Selective Repeat \n\n");
+    printf("Enter Window Size: ");
+    scanf("%d", &window_size);
 
- 		printf(" Enter Window Size : ");
+    printf("Enter Number of Frames to Transmit: ");
+    scanf("%d", &frame_size);
 
- 		scanf("%d",&window_size);
+    input(frames, frame_size);
+    display(frames, frame_size);
+    selective_repeat(frames, window_size, frame_size);
 
- 		printf(" Enter Number Of Frames To Be Transmitted : ");
-
- 		scanf("%d",&frame_size);
-
- 		input(frames , frame_size);
-
- 		display(frames , frame_size);
-
- 		selective_repeat(frames , window_size , frame_size);
-
- 		return 0;
-
+    return 0;
 }
