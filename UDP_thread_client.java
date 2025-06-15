@@ -1,7 +1,9 @@
-import java.net.*;
-import java.io.*;
 
-public class UDPThreadClient {
+import java.io.*;
+import java.net.*;
+
+public class UDP_thread_client {
+
     public static void main(String[] args) throws IOException {
         DatagramSocket clientSocket = new DatagramSocket();
         InetAddress serverIP = InetAddress.getByName("127.0.0.1");
@@ -17,13 +19,12 @@ public class UDPThreadClient {
                     System.out.println("\nServer: " + serverMessage);
                 }
             } catch (SocketException e) {
-                
+
                 System.out.println("Connection closed. Exiting receiver thread...");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();
-
 
         BufferedReader clientInput = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
