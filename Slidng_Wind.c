@@ -1,30 +1,40 @@
-#include<stdio.h>
+#include <stdio.h>
+
 int main()
 {
-	int w,i,f,frames[50];
-	printf("Enter window size");
-	scanf("%d",&w);
-	printf("\n Enter number of frames to transmit");
-	scanf("%d",&f);
-	printf("\n Enter %d frames:",f);
-	for(i=1;i<=f;i++)
-	scanf("%d",&frames[i]);
-	printf("\n with sliding window protocol the frames will be sent in the following manner(assuming corruption of the frame)\n\n");
-	printf("after sending %d frames at each stage sender waits for acknowledgement sent by the receiver \n\n",w);
-	for(i=1;i<=f;i++)
-	{
-		if(i%w==0)
-		{
-			printf("%d\n",frames[i]);
-			printf("acknowledgement of above frames sent is received by sender \n\n");
-		}
-		else
-		{
-			printf("%d\n",frames[i]);
-		}
-		
-	}
-	if(f%w!=0)
-	printf("\n acknowledgement of above frames sent is received by sender\n");
-	return 0;
+    int window_size, num_frames, frames[50];
+
+    printf("Enter window size: ");
+    scanf("%d", &window_size);
+
+    printf("Enter number of frames to transmit: ");
+    scanf("%d", &num_frames);
+
+    printf("Enter %d frame values:\n", num_frames);
+    for (int i = 0; i < num_frames; i++)
+    {
+        printf("Frame[%d]: ", i);
+        scanf("%d", &frames[i]);
+    }
+
+    printf("\n--- Sliding Window Protocol Simulation ---\n");
+    printf("Sending frames in windows of size %d\n\n", window_size);
+
+    for (int i = 0; i < num_frames; i++)
+    {
+        // Send window
+        printf("Sending window starting at Frame[%d]:\n", i);
+        for (int j = i; j < i + window_size && j < num_frames; j++)
+        {
+            printf("  Sent Frame[%d] -> %d\n", j, frames[j]);
+        }
+
+        printf("Waiting for Acknowledgment...\n");
+        printf("Acknowledgment received for frames %d to %d\n\n", i, ((i + window_size - 1) < num_frames - 1 ? (i + window_size - 1) : num_frames - 1));
+
+        i += window_size - 1; // Move the window
+    }
+
+    printf("\nAll frames transmitted successfully!\n");
+    return 0;
 }
