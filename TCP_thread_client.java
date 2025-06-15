@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class MultiClient {
+public class TCP_thread_client {
     public static void main(String[] args) {
         String host = "localhost";
         int port = 12345;
