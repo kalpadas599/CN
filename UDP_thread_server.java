@@ -1,15 +1,17 @@
-import java.net.*;
+
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
-public class UDPThreadServer {
+public class UDP_thread_server {
+
     static int clientCount = 0;
     static Map<String, InetSocketAddress> clientMap = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         DatagramSocket serverSocket = new DatagramSocket(9876);
         System.out.println("Server started...");
-      
+
         new Thread(() -> {
             try {
                 while (true) {
@@ -45,7 +47,6 @@ public class UDPThreadServer {
             }
         }).start();
 
-        
         BufferedReader serverInput = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             String serverMessage = serverInput.readLine();
