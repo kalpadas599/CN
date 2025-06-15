@@ -1,25 +1,30 @@
-#include<stdio.h>
-int main()
-{
-int framesize,sent=0,ack,i;
-printf("enter number of frames\n");
-scanf("%d",&framesize);
-while(1)
-{
-for(i=0;i<framesize;i++)
-{
-printf("frame %d has been transmitted.\n",sent);
-sent++;
-if(sent==framesize)
-break;
-}
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-printf("\n please enter the last acknowledgement received.\n");
-scanf("%d",&ack);
-if(ack>=framesize)
-break;
-else
-sent=ack;
-}
-return 0;
+int main() {
+    int total_frames, frame = 0;
+    int ack;
+    srand(time(NULL)); // Random seed
+
+    printf("Enter the number of frames to send: ");
+    scanf("%d", &total_frames);
+
+    printf("\n--- Stop-and-Wait ARQ Simulation ---\n");
+
+    while (frame < total_frames) {
+        printf("Sending Frame %d...\n", frame);
+
+        int success = rand() % 10;
+
+        if (success < 8) {
+            printf("Acknowledgment for Frame %d received.\n\n", frame);
+            frame++;  // Move to next frame
+        } else {
+            printf("Acknowledgment for Frame %d lost! Retrying...\n\n", frame);
+        }
+    }
+
+    printf("\nAll frames sent and acknowledged successfully!\n");
+    return 0;
 }
