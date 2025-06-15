@@ -9,14 +9,11 @@ public class TCP_multi_server {
         System.out.println("Server Ready !!");
         Socket sock = sersock.accept();
 
-        // reading from keyboard (keyRead object)
         BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in));
 
-        // sending to client (pwrite object)
         OutputStream ostream = sock.getOutputStream();
         PrintWriter pwrite = new PrintWriter(ostream, true);
 
-        // receiving from server ( receiveRead  object)
         InputStream istream = sock.getInputStream();
         BufferedReader receiveRead = new BufferedReader(new InputStreamReader(istream));
 
