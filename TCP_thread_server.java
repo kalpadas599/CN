@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class MultiClientServer {
+public class TCP_thread_server {
     private static int clientIdCounter = 1;
     private static final Map<Integer, ClientHandler> clients = new ConcurrentHashMap<>();
 
@@ -93,7 +93,7 @@ public class MultiClientServer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                MultiClientServer.removeClient(clientId);
+                TCP_thread_server.removeClient(clientId);
             }
         }
     }
